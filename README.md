@@ -296,4 +296,7 @@ The watchlist persists in `localStorage` — closing or refreshing the tab keeps
 
 ## License
 
-MIT
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
