@@ -1,31 +1,37 @@
 import type { KlineData } from '@/features/market/types'
 import type { NextRequest } from 'next/server'
 
-const SYMBOL_MAP: Record<string, string> = {
-  BTC: 'BTCUSDT',
-  ETH: 'ETHUSDT',
-  SOL: 'SOLUSDT',
-  BNB: 'BNBUSDT',
-  ADA: 'ADAUSDT',
-  XRP: 'XRPUSDT',
+const SYMBOL_TO_GECKO: Record<string, string> = {
+  BTC: 'bitcoin',
+  ETH: 'ethereum',
+  SOL: 'solana',
+  BNB: 'binancecoin',
+  ADA: 'cardano',
+  XRP: 'ripple',
 }
 
-const INTERVAL_MAP: Record<string, { binanceInterval: string; limit: number }> = {
-  '1h': { binanceInterval: '1h', limit: 48 },
-  '4h': { binanceInterval: '4h', limit: 42 },
-  '1d': { binanceInterval: '1d', limit: 30 },
-  '1w': { binanceInterval: '1w', limit: 52 },
+// CoinGecko free tier auto-granularity: 1 day = hourly, 2–90 days = daily, 90+ = weekly
+const INTERVAL_TO_DAYS: Record<string, number> = {
+  '1h': 1,
+  '4h': 7,
+  '1d': 30,
+  '1w': 365,
 }
 
 function formatTime(ts: number, interval: string): string {
   const date = new Date(ts)
-  if (interval === '1h' || interval === '4h') {
+  if (interval === '1h') {
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })
   }
-  if (interval === '1w') {
+  if (interval === '4h') {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
+interface GeckoChart {
+  prices: [number, number][]
+  total_volumes: [number, number][]
 }
 
 export async function GET(
@@ -34,36 +40,35 @@ export async function GET(
 ) {
   const { symbol } = await params
   const upperSymbol = symbol.toUpperCase()
-  const binanceSymbol = SYMBOL_MAP[upperSymbol]
+  const geckoId = SYMBOL_TO_GECKO[upperSymbol]
 
-  if (!binanceSymbol) {
+  if (!geckoId) {
     return Response.json({ error: 'Unknown symbol' }, { status: 404 })
   }
 
-  const searchParams = request.nextUrl.searchParams
-  const interval = searchParams.get('interval') ?? '1d'
-  const intervalConfig = INTERVAL_MAP[interval] ?? INTERVAL_MAP['1d']
+  const interval = request.nextUrl.searchParams.get('interval') ?? '1d'
+  const days = INTERVAL_TO_DAYS[interval] ?? 30
 
   try {
-    const url = `https://api.binance.com/api/v3/klines?symbol=${binanceSymbol}&interval=${intervalConfig.binanceInterval}&limit=${intervalConfig.limit}`
+    const url = `https://api.coingecko.com/api/v3/coins/${geckoId}/market_chart?vs_currency=usd&days=${days}&precision=2`
     const res = await fetch(url, { next: { revalidate: 60 } })
 
     if (!res.ok) {
-      return Response.json({ error: 'Binance API error' }, { status: 502 })
+      return Response.json({ error: 'CoinGecko API error' }, { status: 502 })
     }
 
-    const raw: [number, string, string, string, string, string][] = await res.json()
+    const data: GeckoChart = await res.json()
 
-    const klines: KlineData[] = raw.map((k) => ({
-      time: formatTime(k[0], interval),
-      price: parseFloat(k[4]),
-      high: parseFloat(k[2]),
-      low: parseFloat(k[3]),
-      volume: parseFloat(k[5]),
+    const klines: KlineData[] = data.prices.map(([ts, price], i) => ({
+      time: formatTime(ts, interval),
+      price,
+      high: price,
+      low: price,
+      volume: data.total_volumes[i]?.[1] ?? 0,
     }))
 
     return Response.json(klines)
   } catch {
-    return Response.json({ error: 'Failed to fetch kline data' }, { status: 500 })
+    return Response.json({ error: 'Failed to fetch chart data' }, { status: 500 })
   }
 }
