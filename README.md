@@ -1,6 +1,6 @@
 # Crypto Pulse
 
-A real-time crypto market sentiment dashboard built with Next.js 16, TypeScript, and Tailwind CSS. Pulls live price data from Binance's public API and surfaces it through a clean, dark fintech UI with sentiment analysis, interactive charts, and a persistent watchlist.
+A real-time crypto market sentiment dashboard built with Next.js 16, TypeScript, Tailwind CSS, and Supabase. The public landing page routes new users into email/password auth, while the protected dashboard surfaces live prices, sentiment analysis, interactive charts, and an account-synced watchlist.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
@@ -11,6 +11,9 @@ A real-time crypto market sentiment dashboard built with Next.js 16, TypeScript,
 
 ## Features
 
+- **Public landing page** - marketing page at `/` with all primary CTAs routed to signup
+- **Supabase auth** - email/password signup and login matching the Flutter app flow
+- **Cloud watchlist sync** - saved in the shared Supabase `watchlist_items` table
 - **Live market data** — prices auto-refresh every 30 seconds via Binance public API
 - **Sentiment analysis** — Bullish / Bearish / Neutral classification per coin and for the overall market
 - **Interactive price charts** — Recharts AreaChart with 1H / 4H / 1D / 1W intervals
@@ -201,7 +204,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-No API keys required — Binance's public endpoints are called server-side with no authentication.
+Create `.env.local` with the same Supabase project used by the Flutter app:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+```
+
+The Supabase schema is expected to already include `profiles` and `watchlist_items`.
 
 ### Production build
 

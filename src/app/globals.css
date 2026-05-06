@@ -11,3 +11,167 @@ body {
   color: #FFFFFF;
   min-height: 100vh;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes float-panel {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes scanline {
+  0% {
+    top: -8px;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(0, 255, 133, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 255, 133, 0.35);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.landing-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.landing-hero-content {
+  flex-direction: row;
+}
+
+.landing-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.landing-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.landing-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.landing-market-table {
+  min-width: 780px;
+}
+
+.landing-overflow-x {
+  overflow-x: auto;
+}
+
+@media (max-width: 900px) {
+  .landing-section {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .landing-hero-content {
+    flex-direction: column;
+    gap: 48px !important;
+  }
+
+  .landing-grid-3,
+  .landing-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .landing-grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-section {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .landing-grid-3,
+  .landing-grid-4,
+  .landing-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

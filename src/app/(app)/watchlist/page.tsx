@@ -72,7 +72,7 @@ export default function WatchlistPage() {
                 <p className="text-sm text-[#8A8A9A]">Browse the Market to add coins</p>
               </div>
               <Link
-                href="/"
+                href="/dashboard"
                 className="rounded-full border border-[rgba(255,255,255,0.12)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[rgba(255,255,255,0.04)]"
               >
                 Go to Market

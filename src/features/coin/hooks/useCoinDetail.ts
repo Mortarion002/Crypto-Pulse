@@ -14,14 +14,13 @@ export default function useCoinDetail(
 
   useEffect(() => {
     let mounted = true
-    setLoading(true)
-    setError(null)
 
     api
       .get<KlineData[]>(`/coin/${symbol}`, { params: { interval } })
       .then(({ data }) => {
         if (mounted) {
           setKlines(data)
+          setError(null)
           setLoading(false)
         }
       })
