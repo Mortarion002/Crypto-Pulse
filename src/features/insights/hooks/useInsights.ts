@@ -11,13 +11,13 @@ export default function useInsights() {
 
   useEffect(() => {
     let mounted = true
-    setLoading(true)
 
     api
       .get<InsightsData>('/insights')
       .then(({ data }) => {
         if (mounted) {
           setInsights(data)
+          setError(null)
           setLoading(false)
         }
       })

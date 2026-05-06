@@ -92,7 +92,7 @@ export default function CoinDetailPage() {
           transition={{ duration: 0.3, delay: 0 }}
           className="text-sm text-[#8A8A9A]"
         >
-          <Link href="/" className="transition-colors hover:text-white">
+          <Link href="/dashboard" className="transition-colors hover:text-white">
             ← Market
           </Link>{' '}
           / <span className="text-white">{coin?.name ?? symbol}</span> ({symbol})

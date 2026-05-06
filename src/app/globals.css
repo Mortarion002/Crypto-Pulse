@@ -11,3 +11,35 @@ body {
   color: #FFFFFF;
   min-height: 100vh;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes float-panel {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes scanline {
+  from {
+    top: -8px;
+  }
+  to {
+    top: 100%;
+  }
+}

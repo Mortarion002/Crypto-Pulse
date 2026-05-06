@@ -1,14 +1,16 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+
+import { useAuth } from '@/features/auth/AuthProvider'
 
 const navigation = [
   {
-    href: '/',
+    href: '/dashboard',
     label: 'Market',
     isActive: (pathname: string) =>
-      pathname === '/' || pathname.startsWith('/coin/'),
+      pathname === '/dashboard' || pathname.startsWith('/coin/'),
   },
   {
     href: '/insights',
@@ -24,11 +26,18 @@ const navigation = [
 
 export default function Navbar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const { signOut } = useAuth()
+
+  async function handleSignOut() {
+    await signOut()
+    router.replace('/')
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-[rgba(255,255,255,0.06)] bg-[#13131A]/95 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-3">
+        <Link href="/dashboard" className="flex items-center gap-3">
           <span className="flex h-3 w-3 animate-pulse rounded-full bg-[#00FF85] shadow-[0_0_16px_rgba(0,255,133,0.75)]" />
           <span className="text-[20px] font-bold tracking-tight text-white">
             Crypto Pulse
@@ -53,6 +62,13 @@ export default function Navbar() {
               </Link>
             )
           })}
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="rounded-lg px-3 py-2 text-sm font-medium text-[#8A8A9A] transition-colors hover:bg-[rgba(255,255,255,0.04)] hover:text-white"
+          >
+            Log out
+          </button>
         </nav>
       </div>
     </header>
