@@ -1169,9 +1169,9 @@ export default function LandingPage() {
           </div>
           <div style={{ display: 'flex', gap: 24 }}>
             {['Privacy', 'Terms', 'Status', 'Docs'].map((label) => (
-              <a
+              <Link
                 key={label}
-                href="#"
+                href={`/${label.toLowerCase()}`}
                 style={{ fontSize: 12, color: '#8A8A9A', textDecoration: 'none', transition: 'color .2s' }}
                 onMouseEnter={(event) => {
                   event.currentTarget.style.color = '#fff'
@@ -1181,7 +1181,7 @@ export default function LandingPage() {
                 }}
               >
                 {label}
-              </a>
+              </Link>
             ))}
           </div>
           <div style={{ fontSize: 11, color: '#555' }}>© 2026 CryptoPulse. Real-time data, no guarantees.</div>
